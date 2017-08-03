@@ -63,7 +63,7 @@ class ReportDetailPage extends React.Component {
   }
 
   commentSection() {
-    let {loading, error, getReportById} = this.props.data;
+    let {loading, error, report} = this.props.data;
     if (error) {
       return (<Error/>)
     } else if (loading) {
@@ -71,23 +71,21 @@ class ReportDetailPage extends React.Component {
     } else {
       return (
         <div className="container">
-          <CommentList comments={getReportById.comments}/>
+          <CommentList comments={report.comments}/>
         </div>
       )
     }
   }
 
   reportSection() {
-    let {loading, error, getReportById} = this.props.data;
+    let {loading, error, report} = this.props.data;
     if (error) {
       return (<Error/>)
     } else if (loading) {
       return (<Loading/>)
     } else {
       const ownUserId = localStorage.getItem("userId");
-      const report = getReportById;
       const isMine = (ownUserId == report.user.userId);
-
 
       const mineLayout = (
         <div className="row container">
@@ -171,8 +169,7 @@ class ReportDetailPage extends React.Component {
 
   componentWillReceiveProps(newProps) {
     // note: set data to the state after receive from server
-    let {getReportById} = newProps.data;
-    let report = getReportById;
+    let {report} = newProps.data;
     if (report && !this.state.todoes) {
       this.setState({
         todoes: report.todoes || [],
@@ -224,7 +221,7 @@ class ReportDetailPage extends React.Component {
 
 const getReportDetailQuery = gql`query 
   GetReportQuery($id: Int) {
-    getReportById(id: $id) {
+    report(id: $id) {
       reportId
       user {
         userId

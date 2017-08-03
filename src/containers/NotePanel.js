@@ -16,13 +16,13 @@ class NotePanel extends React.Component {
   }
 
   content() {
-    let {loading, error, getNote, updateNote} = this.props.data;
+    let {loading, error, note, updateNote} = this.props.data;
     if (error) {
       return (<Error/>)
     } else if (loading) {
       return (<Loading/>)
     } else {
-      return <textarea rows="20" cols="40" onBlur={this.handleUpdateNote}>{getNote}</textarea>
+      return <textarea rows="20" cols="40" onBlur={this.handleUpdateNote}>{note}</textarea>
     }
   }
 
@@ -38,7 +38,7 @@ class NotePanel extends React.Component {
 
 const getNote = gql`query
   GetNote{
-    getNote
+    note
   }
 `;
 

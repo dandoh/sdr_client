@@ -12,13 +12,13 @@ class GroupPage extends React.Component {
 
   render() {
     let {groupId} = this.props.params;
-    let {loading, error, getReportsByGroupId} = this.props.data;
+    let {loading, error, reportsOfGroup} = this.props.data;
     if (error) {
       return (<Error/>)
     } else if (loading) {
       return (<Loading/>)
     } else {
-      let reports = getReportsByGroupId;
+      let reports = reportsOfGroup;
       return (
         <div>
           {function(){
@@ -43,7 +43,7 @@ class GroupPage extends React.Component {
 
 const getReportsQuery = gql`query 
   GetReportsQuery($id: Int) {
-    getReportsByGroupId(id: $id) {
+    reportsOfGroup(id: $id) {
       reportId
       user {
         userId

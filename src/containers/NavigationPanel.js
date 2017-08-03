@@ -23,8 +23,7 @@ class NavigationPanel extends React.Component {
     const subMenuStyle = {maxWidth: 400, margin: '0 auto 10px'};
 
     let activeGroupId = this.getActiveGroupId();
-    let {loading, getGroups} = this.props.data;
-    let groups = getGroups;
+    let {loading, groups} = this.props.data;
 
     const loadingView = (
       <div>Loading...</div>
@@ -106,7 +105,7 @@ class NavigationPanel extends React.Component {
 
 
 const getGroupsQuery = gql` query {
-  getGroups {
+  groups {
     groupId
     name
   }

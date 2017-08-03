@@ -16,16 +16,15 @@ class UsersPage extends React.Component {
   }
 
   render() {
-    let {loading, error, getUsersByGroupId} = this.props.data;
+    let {loading, error, usersOfGroup} = this.props.data;
     if (error) {
       return (<Error/>)
     } else if (loading) {
       return (<Loading/>)
     } else {
-      let users = getUsersByGroupId;
       return (
         <div>
-          <UserList users={users}/>
+          <UserList users={usersOfGroup}/>
           <form onSubmit={this.handleSubmit} className="form-horizontal">
             <fieldset>
 
@@ -77,8 +76,8 @@ class UsersPage extends React.Component {
 
 }
 
-const getGroupsQuery = gql` query GetUsersQuery($groupId: Int){
-  getUsersByGroupId(id: $groupId) {
+const getUsersQuery = gql` query GetUsersQuery($groupId: Int){
+  usersOfGroup(id: $groupId) {
     userId
     name
     email
@@ -86,7 +85,7 @@ const getGroupsQuery = gql` query GetUsersQuery($groupId: Int){
   }
 }`;
 
-const withData = graphql(getGroupsQuery, {
+const withData = graphql(getUsersQuery, {
   options: (ownProps) => {
     return {
       variables: {
