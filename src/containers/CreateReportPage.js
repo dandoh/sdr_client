@@ -50,10 +50,10 @@ class CreateReportPage extends React.Component {
     return (
       <div>
         <div className="row container">
-          <div className="col-md-6">
+          <div className="col-sm-5">
             <div className="todolist not-done">
               <h1>Daily report:</h1>
-              <h2>Plan your day work:</h2>
+              <h2>Plan your workday:</h2>
               <input type="text" className="form-control add-todo"
                      placeholder="Add a task" onKeyDown={this.onEnterTodo}
               />
@@ -78,7 +78,7 @@ class CreateReportPage extends React.Component {
       variables: {
         contentTodoes: this.state.todoes.map(todo => todo.content),
         states: this.state.todoes.map(todo => todo.state),
-        summerization: "",
+        summary: "",
         groupId: parseInt(this.props.params.groupId)
       }
     }).then(res => {

@@ -23,9 +23,9 @@ export default function TodoItem({todo, editable, hasTick, onTick, onDelete}) {
   const textStyle = {textDecoration: todo.state == 1 ? "line-through" : "none"};
   return (
     <li className="ui-state-default">
-      <div className="checkbox">
+      <div className="checkbox" style={{marginLeft: "20px"}}>
         {hasTick ? tickBox : null}
-        <label style={textStyle}>  {todo.content}</label>
+        <span style={textStyle}>  {todo.content}</span>
         {editable ? deleteButton : null}
       </div>
     </li>

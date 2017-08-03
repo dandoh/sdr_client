@@ -12,14 +12,14 @@ class ReportDetailPage extends React.Component {
   constructor() {
     super();
     this.state = {
-      summerization: "",
+      summary: "",
       comment: ""
     };
 
     this.onTick = this.onTick.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onEnterTodo = this.onEnterTodo.bind(this);
-    this.onChangeSummerization = this.onChangeSummerization.bind(this);
+    this.onChangeSummary = this.onChangeSummary.bind(this);
     this.onUpdateClick = this.onUpdateClick.bind(this);
     this.onCommentChange = this.onCommentChange.bind(this);
     this.onSubmitComment = this.onSubmitComment.bind(this);
@@ -38,7 +38,7 @@ class ReportDetailPage extends React.Component {
             <h4>Comment</h4>
           </div>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-5">
               <div className="widget-area no-padding blank">
                 <div className="status-upload">
                   <form onSubmit={this.onSubmitComment}>
@@ -91,7 +91,7 @@ class ReportDetailPage extends React.Component {
 
       const mineLayout = (
         <div className="row container">
-          <div className="col-md-6">
+          <div className="col-sm-5">
             <div className="todolist not-done">
               <h1>Daily report:</h1>
               <h4>Todo list:</h4>
@@ -99,9 +99,9 @@ class ReportDetailPage extends React.Component {
                      placeholder="Add more task" onKeyDown={this.onEnterTodo}/>
               <TodoList todoes={this.state.todoes} hasTick={true}
                         editable={true} onTick={this.onTick} onDelete={this.onDelete}/>
-              <h4>Summerization:</h4>
-              <textarea className="form-control animated" onChange={this.onChangeSummerization}>
-              {this.state.summerization}
+              <h4>Summary:</h4>
+              <textarea className="form-control animated" onChange={this.onChangeSummary}>
+              {this.state.summary}
               </textarea>
               <button className="btn btn-info pull-right"
                       onClick={this.onUpdateClick}
@@ -115,14 +115,14 @@ class ReportDetailPage extends React.Component {
       const otherLayout = (
 
         <div className="row container">
-          <div className="col-md-6">
+          <div className="col-md-5">
             <div className="todolist not-done">
               <h1>{`${report.user.name}'s Daily report:`}</h1>
               <h4>Todo list:</h4>
               <TodoList todoes={this.state.todoes} hasTick={true}
                         editable={false}/>
-              <h4>Summerization:</h4>
-              <p>{this.state.summerization}</p>
+              <h4>Summary:</h4>
+              <p>{this.state.summary}</p>
             </div>
           </div>
         </div>
@@ -164,9 +164,9 @@ class ReportDetailPage extends React.Component {
     }
   }
 
-  onChangeSummerization(e) {
+  onChangeSummary(e) {
     e.preventDefault();
-    this.setState({summerization: e.target.value})
+    this.setState({summary: e.target.value})
   }
 
   componentWillReceiveProps(newProps) {
@@ -176,7 +176,7 @@ class ReportDetailPage extends React.Component {
     if (report && !this.state.todoes) {
       this.setState({
         todoes: report.todoes || [],
-        summerization: report.summerization,
+        summary: report.summary,
       });
     }
   }
@@ -187,7 +187,7 @@ class ReportDetailPage extends React.Component {
         reportId: parseInt(this.props.params.reportId),
         contentTodoes: this.state.todoes.map(todo => todo.content),
         states: this.state.todoes.map(todo => todo.state),
-        summerization: this.state.summerization,
+        summary: this.state.summary,
         status: "Not decided this field yet" // !!
       }
     }).then(res => {
@@ -235,7 +235,7 @@ const getReportDetailQuery = gql`query
         content
         state
       }
-      summerization
+      summary
       comments {
         user {
           name
@@ -259,9 +259,9 @@ const withData = graphql(getReportDetailQuery, {
 });
 
 const updateReport = gql`mutation 
-  UpdateReport($reportId: Int, $contentTodoes: [String], $states: [Int], $summerization: String, $status: String) {
+  UpdateReport($reportId: Int, $contentTodoes: [String], $states: [Int], $summary: String, $status: String) {
     updateReport(contentTodoes: $contentTodoes, states: $states, reportId: $reportId,
-                 summerization: $summerization, status: $status)
+                 summary: $summary, status: $status)
   }
 `;
 

@@ -46,8 +46,8 @@ class NavigationPanel extends React.Component {
             <h4>Create new group</h4>
 
             <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="name">Group Name</label>
-              <div className="col-md-5">
+              <label className="col-md-5 control-label" htmlFor="name">Group Name</label>
+              <div className="col-md-7">
                 <input id="newGroupName" name="newGroupName" type="text"
                        placeholder="group name" className="form-control input-md"
                        value={this.state.newGroupName} onChange={this.handleChange}/>
@@ -55,8 +55,8 @@ class NavigationPanel extends React.Component {
             </div>
 
             <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="singlebutton"/>
-              <div className="col-md-4">
+              <label className="col-md-6 control-label" htmlFor="singlebutton"/>
+              <div className="col-md-6">
                 <button id="singlebutton" name="singlebutton" className="btn btn-success">Create</button>
               </div>
             </div>

@@ -21,6 +21,13 @@ class GroupPage extends React.Component {
       let reports = getReportsByGroupId;
       return (
         <div>
+          {function(){
+            if (reports.length == 0) {
+              return <h4>There is no daily report on this group yet, click to create one</h4>
+            } else {
+              return <h4>{`Daily reports of ${reports[0].group.name}`}</h4>
+            }
+          }()}
           <ReportList reports={reports}/>
           <LinkContainer to={`/group/${groupId}/create_report`}>
             <Button>Create new report</Button>
@@ -48,6 +55,7 @@ const getReportsQuery = gql`query
       }
       group {
         groupId
+        name
       }
     }
   }`;
