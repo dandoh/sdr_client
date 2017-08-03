@@ -96,9 +96,12 @@ class NavigationPanel extends React.Component {
         userId: 1,
         name: newGroupName,
       }
-    }).then(() => {
+    }).then((res) => {
+      console.log(res);
       this.props.data.refetch();
       this.setState({newGroupName: ""});
+    }).catch(err => {
+      alert(err.toString());
     })
   }
 }

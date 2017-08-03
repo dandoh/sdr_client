@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter} from "react-router";
 import {graphql} from 'react-apollo'
+import {compose} from 'react-apollo';
 import gql from 'graphql-tag'
 import Loading from '../components/Loading'
 import Error from '../components/Error'
@@ -268,17 +269,23 @@ const createComment = gql`mutation
     createComment(content: $content, reportId: $reportId)
   }`;
 
-const withUpdateReport = graphql(updateReport, {name: 'updateReport'});
 
-const withCreateComment = graphql(createComment, {name: 'createComment'});
-
-
-export default withCreateComment(
-  withUpdateReport(
-    withData(
-      withRouter(
-        ReportDetailPage
-      )
-    )
-  )
+const withMutation = compose(
+  graphql(updateReport, {name: 'updateReport'}),
+  graphql(createComment, {name: 'createComment'})
 );
+
+export default withMutation(withData(withRouter(ReportDetailPage)))
+// const withUpdateReport = graphql(updateReport, {name: 'updateReport'});
+// const withCreateComment = graphql(createComment, {name: 'createComment'});
+
+
+// export default withCreateComment(
+//   withUpdateReport(
+//     withData(
+//       withRouter(
+//         ReportDetailPage
+//       )
+//     )
+//   )
+// );
