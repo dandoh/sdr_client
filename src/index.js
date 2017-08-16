@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import {Router, Route, IndexRoute, browserHistory} from 'react-router'
 import ApolloClient, {createNetworkInterface} from 'apollo-client'
 import {ApolloProvider} from 'react-apollo'
-import 'tachyons'
 
 import './index.css'
 import App from './App'
@@ -13,6 +12,7 @@ import UsersPage from './containers/UsersPage'
 import SignInPage from './containers/SignInPage'
 import SignUpPage from './containers/SignUpPage'
 import ReportDetailPage from './containers/ReportDetailPage'
+import NewsFeedPage from './containers/NewsFeedPage'
 
 
 const logErrors = {
@@ -71,7 +71,7 @@ ReactDOM.render((
       <Router history={browserHistory}>
         <Route path="/">
           <Route onEnter={ensureSignedIn} components={App}>
-            <IndexRoute/>
+            <IndexRoute component={NewsFeedPage} />
             <Route path="group">
               <Route path=":groupId" component={GroupPage}/>
               <Route path=":groupId/create_report" component={CreateReportPage}/>
