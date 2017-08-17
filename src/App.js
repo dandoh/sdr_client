@@ -1,39 +1,8 @@
-import React from 'react';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {MuiThemeProvider} from 'material-ui/styles';
-import autoprefixer from 'material-ui/utils/autoprefixer';
-import AppBar from 'material-ui/AppBar';
-
-import NavigationBar from './containers/NavigationBar';
-import {
-  cyan700,
-  grey600,
-  pinkA100, pinkA200, pinkA400,
-  fullWhite,
-} from 'material-ui/styles/colors';
-import {fade} from 'material-ui/utils/colorManipulator';
-
-const theme = getMuiTheme({
-  palette: {
-    primary1Color: '#646464',
-    primary2Color: pinkA200,
-    primary3Color: pinkA100,
-    accent1Color: cyan700,
-    accent2Color: cyan700,
-    accent3Color: grey600,
-    textColor: fullWhite,
-    secondaryTextColor: fade(fullWhite, 0.7),
-    alternateTextColor: '#303030',
-    canvasColor: '#303030',
-    borderColor: fade(fullWhite, 0.3),
-    disabledColor: fade(fullWhite, 0.3),
-    pickerHeaderColor: fade(fullWhite, 0.12),
-    clockCircleColor: fade(fullWhite, 0.12),
-  },
-  svgIcon: {
-    color: "#FFFFFF"
-  }
-});
+import React from "react";
+import {MuiThemeProvider} from "material-ui/styles";
+import autoprefixer from "material-ui/utils/autoprefixer";
+import NavigationBar from "./containers/NavigationBar";
+import muiTheme from "./mui/muiTheme"
 
 const styles = {
   wrapper: {
@@ -54,6 +23,7 @@ const styles = {
     overflowX: 'scroll',
   },
   content: {
+    padding: '1vh',
     flex: 3,
   },
 };
@@ -67,7 +37,7 @@ class App extends React.Component {
   };
 
   render() {
-    const muiTheme = getMuiTheme(theme);
+    console.log(muiTheme);
     if (!prefixedStyles.main) {
       // do this once because user agent never changes
       const prefix = autoprefixer(muiTheme);
@@ -78,7 +48,7 @@ class App extends React.Component {
     }
     const {children} = this.props;
     return (
-      <MuiThemeProvider muiTheme={theme}>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div style={prefixedStyles.wrapper}>
           <div style={prefixedStyles.main}>
             <div style={prefixedStyles.body}>

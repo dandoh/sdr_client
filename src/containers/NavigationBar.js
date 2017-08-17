@@ -13,7 +13,7 @@ import {List, ListItem, makeSelectable} from "material-ui/List";
 // STYLE - UI RELATED
 const styleFromMuiTheme = (muiTheme) => {
   return {
-
+    color: muiTheme.fullWhite,
     flex: 1,
     marginLeft: 0,
     order: -1,
@@ -36,27 +36,28 @@ class NavigationBar extends React.Component {
       <Paper style={navigationStyle}>
         <h1>Company Logo Here</h1>
         <Divider />
-        <SelectableList value={this.state.pageValue}>
+        <SelectableList
+          value={this.state.pageValue}>
           <ListItem value={-1}
+                    innerDivStyle={{color: 'white'}}
                     primaryText="News Feed"
                     checked={true}
-                    onClick={() => {
-                      this._goToNewsFeedPage()
-                    }}
+                    onClick={this._goToNewsFeedPage}
                     leftIcon={<NewsFeedIcon color="white"/>}/>
           <ListItem value={-2}
+                    innerDivStyle={{color: 'white'}}
                     disabled={true}
                     primaryText="Groups" leftIcon={<GroupIcon color="white"/>}/>
           {this.renderGroupList()}
-          <ListItem onClick={() => {
-            this._showAddNewGroupPopUp()
-          }}
+          <ListItem onClick={this._showAddNewGroupPopUp}
+                    innerDivStyle={{color: 'white'}}
                     style={{paddingLeft: 20}}>
             <div style={{opacity: 0.3}}>Add a group...</div>
           </ListItem>
           <ListItem value={-3}
+                    innerDivStyle={{color: 'white'}}
                     primaryText="Sign out"
-                    onClick={() => {this._signOut()}}
+                    onClick={this._signOut}
                     leftIcon={<SignOutIcon color="white"/>}/>
         </SelectableList>
       </Paper>
@@ -74,6 +75,7 @@ class NavigationBar extends React.Component {
       return groups.map(group => (
         <ListItem
           key={group.groupId}
+          innerDivStyle={{color: 'white'}}
           onClick={() => {
             this._goToGroupPage(group.groupId)
           }}
@@ -88,10 +90,12 @@ class NavigationBar extends React.Component {
   _goToNewsFeedPage = () => {
     this.setState({pageValue: -1});
     // TODO - go to news page
+    this.props.router.replace("/");
   };
   _goToGroupPage = (groupId) => {
     this.setState({pageValue: groupId});
     // TODO - go to group page
+    this.props.router.replace(`/group/${groupId}`);
   };
 
   _showAddNewGroupPopUp = () => {

@@ -93,7 +93,6 @@ class NavigationPanel extends React.Component {
     let newGroupName = this.state.newGroupName;
     this.props.createNewGroup({
       variables: {
-        userId: 1,
         name: newGroupName,
       }
     }).then((res) => {

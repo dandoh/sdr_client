@@ -80,6 +80,7 @@ class SignInPage extends React.Component {
       } else {
         res.json().then(
           json => {
+            console.log(json)
             localStorage.setItem('token', json.token);
             localStorage.setItem('userId', json.userId);
             this.props.router.replace("/");

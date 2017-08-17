@@ -263,7 +263,6 @@ const updateReport = gql`mutation
   }
 `;
 
-
 const createComment = gql`mutation
   CreateComment($content: String, $reportId: Int) {
     createComment(content: $content, reportId: $reportId)
@@ -276,16 +275,3 @@ const withMutation = compose(
 );
 
 export default withMutation(withData(withRouter(ReportDetailPage)))
-// const withUpdateReport = graphql(updateReport, {name: 'updateReport'});
-// const withCreateComment = graphql(createComment, {name: 'createComment'});
-
-
-// export default withCreateComment(
-//   withUpdateReport(
-//     withData(
-//       withRouter(
-//         ReportDetailPage
-//       )
-//     )
-//   )
-// );
