@@ -6,18 +6,17 @@ import TodoItem from './TodoItem';
 
 export default function TodoList({
   todoes, editable,
-  hasTick, onTick, onDelete
+  onTick, onDelete
 }) {
   return (
-    <ul id="sortable" className="list-unstyled">
-      {todoes.map((todo, i) => (<TodoItem
-        key={i}
+    <div>
+      {todoes.map((todo) => (<TodoItem
+        key={todo.todoId}
         todo={todo}
         editable={editable}
-        hasTick={hasTick}
         onTick={onTick}
         onDelete={onDelete}/>))}
-    </ul>
+    </div>
   )
 }
 

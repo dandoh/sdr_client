@@ -1,228 +1,73 @@
-import React from 'react';
+import React from "react";
 import {withRouter} from "react-router";
-import {graphql} from 'react-apollo'
-import {compose} from 'react-apollo';
-import gql from 'graphql-tag'
-import Loading from '../components/Loading'
-import Error from '../components/Error'
+import {graphql, compose} from "react-apollo";
+import gql from "graphql-tag";
+import Subheader from 'material-ui/Subheader';
+import TextField from 'material-ui/TextField'
 import TodoList from '../components/TodoList';
-import CommentList from '../components/CommentList';
-
+import Paper from 'material-ui/Paper'
+import Error from '../components/Error'
+import Loading from '../components/Loading'
+const styles = {
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
+};
 
 class ReportDetailPage extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      summary: "",
-      comment: ""
-    };
 
-    this.onTick = this.onTick.bind(this);
-    this.onDelete = this.onDelete.bind(this);
-    this.onEnterTodo = this.onEnterTodo.bind(this);
-    this.onChangeSummary = this.onChangeSummary.bind(this);
-    this.onUpdateClick = this.onUpdateClick.bind(this);
-    this.onCommentChange = this.onCommentChange.bind(this);
-    this.onSubmitComment = this.onSubmitComment.bind(this);
-  }
-
+  state = {};
 
   render() {
-    return (
-      <div>
-        {this.reportSection()}
-        {/*comment here*/}
-        <br/>
-        <br/>
-        <div className="container">
-          <div className="row">
-            <h4>Comment</h4>
-          </div>
-          <div className="row">
-            <div className="col-md-5">
-              <div className="widget-area no-padding blank">
-                <div className="status-upload">
-                  <form onSubmit={this.onSubmitComment}>
-                    <textarea placeholder="Leave a comment" onChange={this.onCommentChange} value={this.state.comment}>
-                    </textarea>
-                    <button type="submit"
-                            className="btn btn-success green"><i className="fa fa-share"/>
-                      Comment
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {this.commentSection()}
-      </div>
-
-    )
-  }
-
-  commentSection() {
+    console.log(this.props);
     let {loading, error, report} = this.props.data;
     if (error) {
       return (<Error/>)
     } else if (loading) {
       return (<Loading/>)
     } else {
+      console.log("den day roi");
       return (
-        <div className="container">
-          <CommentList comments={report.comments}/>
-        </div>
-      )
-    }
-  }
-
-  reportSection() {
-    let {loading, error, report} = this.props.data;
-    if (error) {
-      return (<Error/>)
-    } else if (loading) {
-      return (<Loading/>)
-    } else {
-      const ownUserId = localStorage.getItem("userId");
-      const isMine = (ownUserId == report.user.userId);
-
-      const mineLayout = (
-        <div className="row container">
-          <div className="col-sm-5">
-            <div className="todolist not-done">
-              <h1>Daily report:</h1>
-              <h4>Todo list:</h4>
-              <input type="text" className="form-control add-todo"
-                     placeholder="Add more task" onKeyDown={this.onEnterTodo}/>
-              <TodoList todoes={this.state.todoes} hasTick={true}
-                        editable={true} onTick={this.onTick} onDelete={this.onDelete}/>
-              <h4>Summary:</h4>
-              <textarea className="form-control animated" onChange={this.onChangeSummary}>
-              {this.state.summary}
-              </textarea>
-              <button className="btn btn-info pull-right"
-                      onClick={this.onUpdateClick}
-                      style={{marginTop: "10px"}} type="button">Update
-              </button>
-            </div>
-          </div>
-        </div>
-      ); // if this report belong to the current user
-
-      const otherLayout = (
-
-        <div className="row container">
-          <div className="col-md-5">
-            <div className="todolist not-done">
-              <h1>{`${report.user.name}'s Daily report:`}</h1>
-              <h4>Todo list:</h4>
-              <TodoList todoes={this.state.todoes} hasTick={true}
-                        editable={false}/>
-              <h4>Summary:</h4>
-              <p>{this.state.summary}</p>
-            </div>
-          </div>
+        <div style={styles.wrapper}>
+          <Subheader>Tasks</Subheader>
+          <TodoList todoes={report.todoes}
+                    editable={true}
+                    hasTick={true}
+                    onTick={this._onTodoTick}
+                    onDelete={this._onTodoDelete}
+          />
+          <Subheader>Note</Subheader>
+          <Paper style={{padding: '1vh'}}>
+            <TextField
+              floatingLabelText={`${report.user.name}'s note`}
+              multiLine={true}
+              fullWidth={true}
+              rows={2}
+              value={report.note}
+              rowsMax={10}
+            />
+          </Paper>
+          <Subheader>Comments</Subheader>
         </div>
       );
 
-      return isMine ? mineLayout : otherLayout
     }
+
   }
 
-  onTick(todo) {
-    if (todo.state == 0) {
-      todo.state = 1;
-    } else {
-      todo.state = 0;
-    }
-    this.setState({
-      todoes: [...this.state.todoes]
-    })
-  }
+  _onTodoTick = (todoId) => {
 
+  };
 
-  onDelete(deleletedTodo) {
-    this.setState({
-      todoes: this.state.todoes.filter(todo => todo != deleletedTodo)
-    });
-  }
+  _onTodoDelete = (todoId) => {
 
-  onEnterTodo(e) {
-    if (e.which == 13) {
-      let content = e.target.value;
-      let newTodo = {
-        content,
-        state: 0
-      };
-      e.target.value = "";
-      this.setState({
-        todoes: this.state.todoes.concat(newTodo)
-      });
-    }
-  }
-
-  onChangeSummary(e) {
-    e.preventDefault();
-    this.setState({summary: e.target.value})
-  }
-
-  componentWillReceiveProps(newProps) {
-    // note: set data to the state after receive from server
-    let {report} = newProps.data;
-    if (report && !this.state.todoes) {
-      this.setState({
-        todoes: report.todoes || [],
-        summary: report.summary,
-      });
-    }
-  }
-
-  onUpdateClick() {
-    this.props.updateReport({
-      variables: {
-        reportId: parseInt(this.props.params.reportId),
-        contentTodoes: this.state.todoes.map(todo => todo.content),
-        states: this.state.todoes.map(todo => todo.state),
-        summary: this.state.summary,
-        status: "Not decided this field yet" // !!
-      }
-    }).then(res => {
-      alert("Update daily report successfully");
-    }, err => {
-      alert("Can't update report");
-    })
-  }
-
-  onCommentChange(e) {
-    e.preventDefault();
-    this.setState({comment: e.target.value});
-  }
-
-  onSubmitComment(e) {
-    e.preventDefault();
-    this.props.createComment({
-      variables: {
-        content: this.state.comment,
-        reportId: this.props.params.reportId
-      }
-    }).then(res => {
-      this.props.data.refetch();
-      this.setState({
-        comment: "",
-      });
-    }, err => {
-      alert("Something wrong happened, dude!")
-    })
-  }
-
-
+  };
 }
 
 const getReportDetailQuery = gql`query 
-  GetReportQuery($id: Int) {
-    report(id: $id) {
+  GetReportQuery($reportId: Int) {
+    report(reportId: $reportId) {
       reportId
       user {
         userId
@@ -233,7 +78,7 @@ const getReportDetailQuery = gql`query
         content
         state
       }
-      summary
+      note
       comments {
         user {
           name
@@ -249,19 +94,13 @@ const withData = graphql(getReportDetailQuery, {
   options: (ownProps) => {
     return {
       variables: {
-        id: parseInt(ownProps.params.reportId)
+        reportId: parseInt(ownProps.params.reportId)
       },
       forceFetch: true,
     }
   }
 });
 
-const updateReport = gql`mutation 
-  UpdateReport($reportId: Int, $contentTodoes: [String], $states: [Int], $summary: String, $status: String) {
-    updateReport(contentTodoes: $contentTodoes, states: $states, reportId: $reportId,
-                 summary: $summary, status: $status)
-  }
-`;
 
 const createComment = gql`mutation
   CreateComment($content: String, $reportId: Int) {
@@ -270,8 +109,7 @@ const createComment = gql`mutation
 
 
 const withMutation = compose(
-  graphql(updateReport, {name: 'updateReport'}),
   graphql(createComment, {name: 'createComment'})
 );
 
-export default withMutation(withData(withRouter(ReportDetailPage)))
+export default withData(withRouter(ReportDetailPage))

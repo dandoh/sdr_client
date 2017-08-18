@@ -2,33 +2,45 @@
  * Created by Dandoh on 7/21/17.
  */
 import React from "react";
-import {LinkContainer} from "react-router-bootstrap";
-import {Button, Glyphicon} from "react-bootstrap";
+import Paper from 'material-ui/Paper'
+import Checkbox from 'material-ui/Checkbox';
+import TextField from 'material-ui/TextField'
+import IconButton from 'material-ui/IconButton';
+import ActionDelete from 'material-ui/svg-icons/content/clear';
 
-export default function TodoItem({todo, editable, hasTick, onTick, onDelete}) {
-  const tickBox = (
-    <input onClick={(e) => {
-      onTick(todo)
-    }} type="checkbox" checked={todo.state == 1} disabled={!editable}/>
-  );
-  const deleteButton = (
-    <button onClick={(e) => {
-      e.preventDefault();
-      onDelete(todo)
-    }} className="remove-item btn btn-default btn-xs pull-right">
-      <Glyphicon glyph="remove"/>
-    </button>
-  );
-
-  const textStyle = {textDecoration: todo.state == 1 ? "line-through" : "none"};
+const styles = {
+  errorStyle: {
+    margin: 0
+  },
+};
+export default function TodoItem({todo, editable, onTick, onDelete}) {
   return (
-    <li className="ui-state-default">
-      <div className="checkbox" style={{marginLeft: "20px"}}>
-        {hasTick ? tickBox : null}
-        <span style={textStyle}>  {todo.content}</span>
-        {editable ? deleteButton : null}
+    <Paper style={{padding: '0.8vh', display: 'flex'}}>
+      <div style={{marginTop: '1.7vh'}}>
+        <Checkbox
+          disabled={!editable}
+          onCheck={() => onTick(todo.todoId)}
+          checked={todo.state == 1}
+        />
       </div>
-    </li>
+      <div style={{flex: 5, marginTop: '2vh'}}>
+        {todo.content}
+      </div>
+      <TextField
+        style={{flex: 2, marginRight: '1vh'}}
+        hintText="Estimated Time"
+      />
+      <TextField
+        style={{flex: 2, marginRight: '1vh', marginBottom: '1vh'}}
+        hintText="Spent Time"
+        errorText=""
+        errorStyle={styles.errorStyle}
+      />
+      {editable &&
+      <IconButton onClick={() => onDelete(todo.todoId)} tooltip="Delete this task">
+        <ActionDelete color="black"/>
+      </IconButton>}
+    </Paper>
   )
 }
 

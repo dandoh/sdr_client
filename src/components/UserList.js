@@ -2,16 +2,22 @@
  * Created by Dandoh on 7/21/17.
  */
 import React from "react";
+import {GridList, GridTile} from 'material-ui/GridList';
+
 import UserItem from "./UserItem";
-export default function UserList({users}) {
+const style = {
+
+};
+export default function UserList({users, onUserClick}) {
   return (
     <div>
-      {users.map((user) => {
-          return (
-            <UserItem key={user.userId} user={user}/>
-          )
-        }
-      )}
+      <GridList
+        style={style}
+        cols={3}>
+        {users.map((user) => (
+          <UserItem key={user.userId} user={user} onClick={onUserClick}/>
+        ))}
+      </GridList>
     </div>
   )
 }

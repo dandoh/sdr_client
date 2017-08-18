@@ -13,6 +13,9 @@ import SignInPage from './containers/SignInPage'
 import SignUpPage from './containers/SignUpPage'
 import ReportDetailPage from './containers/ReportDetailPage'
 import NewsFeedPage from './containers/NewsFeedPage'
+import UserReportPage from './containers/UserReportPage'
+import UserArchivePage from './containers/UserArchivePage'
+
 
 
 const logErrors = {
@@ -71,12 +74,19 @@ ReactDOM.render((
       <Router history={browserHistory}>
         <Route path="/">
           <Route onEnter={ensureSignedIn} components={App}>
-            <IndexRoute component={NewsFeedPage} />
+            <IndexRoute component={NewsFeedPage}/>
             <Route path="group">
               <Route path=":groupId" component={GroupPage}/>
-              <Route path=":groupId/create_report" component={CreateReportPage}/>
-              <Route path=":groupId/users" component={UsersPage}/>
-              <Route path=":groupId/report/:reportId" component={ReportDetailPage}/>
+            </Route>
+
+            <Route path="user">
+              <Route path=":userId">
+                <Route path="report" component={UserReportPage}>
+                  <Route path="archives" component={UserArchivePage}/>
+                  <Route path=":reportId" component={ReportDetailPage}/>
+                </Route>
+              </Route>
+
             </Route>
           </Route>
           <Route onEnter={ensureSignedOut}>

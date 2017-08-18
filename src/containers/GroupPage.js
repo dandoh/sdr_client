@@ -13,6 +13,8 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton'
 import Error from '../components/Error'
 import Loading from '../components/Loading'
+import UserList from '../components/UserList'
+
 
 import FeedItem from '../components/FeedItem';
 
@@ -28,16 +30,16 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
   },
-  groupName: {
+  userName: {
     fontSize: 20,
     color: '#000000'
   },
 
-  groupPurpose: {
+  date: {
     fontSize: 12,
     color: '#969696'
   },
-  groupInfoBox: {
+  userInfoBox: {
     display: 'flex',
     flexDirection: 'column',
     paddingLeft: '2vh',
@@ -94,9 +96,9 @@ class GroupPage extends React.Component {
     return (
       <div style={styles.wrapper}>
         <Paper style={styles.bar}>
-          <div style={styles.groupInfoBox}>
-            <div style={styles.groupName}>{group.name}</div>
-            <div style={styles.groupPurpose}>{group.purpose}</div>
+          <div style={styles.userInfoBox}>
+            <div style={styles.userName}>{group.name}</div>
+            <div style={styles.date}>{group.purpose}</div>
           </div>
           <div style={styles.space}></div>
           <div style={styles.reportButtonWrapper}>
@@ -110,27 +112,16 @@ class GroupPage extends React.Component {
           </div>
         </Paper>
         <div style={styles.body}>
-          <div>
-            <GridList
-              cols={3}
-            >
-              {group.users.map((user) => (
-                <Paper>
-                  <GridTile
-                    key={user.userId}
-                    title={user.name}>
-                    <ListItem innerDivStyle={styles.userStyle}>
-                      <img src={user.avatar}/>
-                    </ListItem>
-                  </GridTile>
-                </Paper>
-              ))}
-            </GridList>
-          </div>
+          <UserList users={group.users} onUserClick={this._handleUserClick}/>
         </div>
       </div>
     );
   }
+
+  _handleUserClick = (user) => {
+    console.log(user);
+    this.props.router.replace(`/user/${user.userId}/report/${user.todayReport.reportId}`);
+  };
 
 }
 
@@ -144,6 +135,9 @@ const getGroupQuery = gql`query GetGroup($groupId: Int!){
       avatar
       userId
       name
+      todayReport {
+        reportId
+      }
     }
   }
 }

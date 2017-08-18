@@ -89,12 +89,12 @@ class NavigationBar extends React.Component {
 
   _goToNewsFeedPage = () => {
     this.setState({pageValue: -1});
-    // TODO - go to news page
+    // TODO - go to news pageState
     this.props.router.replace("/");
   };
   _goToGroupPage = (groupId) => {
     this.setState({pageValue: groupId});
-    // TODO - go to group page
+    // TODO - go to group pageState
     this.props.router.replace(`/group/${groupId}`);
   };
 

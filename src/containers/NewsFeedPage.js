@@ -7,6 +7,7 @@ import ReportIcon from 'material-ui/svg-icons/av/playlist-add-check'
 import muiTheme from '../mui/muiTheme'
 import {List, ListItem} from "material-ui/List";
 import RaisedButton from 'material-ui/RaisedButton'
+import Subheader from 'material-ui/Subheader';
 
 import FeedItem from '../components/FeedItem';
 
@@ -53,8 +54,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    overflowY: 'hidden',
-    overflowX: 'scroll',
   },
 
   divider: {
@@ -80,9 +79,9 @@ class NewsFeedPage extends React.Component {
           </div>
         </Paper>
         <div style={styles.body}>
-          <div style={styles.headerList}>Today's reports</div>
+          <Subheader>Today reports</Subheader>
           {this.renderNewsFeedOfTodayReports()}
-          <div style={styles.headerList}>Old reports</div>
+          <Subheader>Old reports</Subheader>
           {this.renderNewsFeedOfOldReports()}
         </div>
       </div>
