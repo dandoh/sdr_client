@@ -29,15 +29,25 @@ class NavigationBar extends React.Component {
     pageValue: -1,
   };
 
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.data) {
+      this.props.data.refetch();
+    }
+  }
+
+
   render() {
     const {muiTheme} = this.props;
     const navigationStyle = styleFromMuiTheme(muiTheme);
+    const pageValue = this._determinePageValue();
+    console.log(this.props.data);
     return (
       <Paper style={navigationStyle}>
-        <h1>Company Logo Here</h1>
+        <h1>Scoville</h1>
         <Divider />
         <SelectableList
-          value={this.state.pageValue}>
+          value={pageValue}>
           <ListItem value={-1}
                     innerDivStyle={{color: 'white'}}
                     primaryText="News Feed"
@@ -49,10 +59,11 @@ class NavigationBar extends React.Component {
                     disabled={true}
                     primaryText="Groups" leftIcon={<GroupIcon color="white"/>}/>
           {this.renderGroupList()}
-          <ListItem onClick={this._showAddNewGroupPopUp}
+          <ListItem onClick={this._addNewGroup}
                     innerDivStyle={{color: 'white'}}
+                    value={-4}
                     style={{paddingLeft: 20}}>
-            <div style={{opacity: 0.3}}>Add a group...</div>
+            <div style={{opacity: 0.3}}>Create a group...</div>
           </ListItem>
           <ListItem value={-3}
                     innerDivStyle={{color: 'white'}}
@@ -64,14 +75,27 @@ class NavigationBar extends React.Component {
     )
   }
 
-  renderGroupList() {
-
-    let {loading, error, groups} = this.props.data;
-    if (error) {
-      return null;
-    } else if (loading) {
-      return null;
+  _determinePageValue = () => {
+    let {location} = this.props;
+    if (location.pathname == "/") { return -1; }
+    let regex = /^\/group\/(\d+)/gi;
+    let match = regex.exec(location.pathname);
+    if (match) {
+      return parseInt(match[1]);
     } else {
+      if (/^\/group\//gi.test(location.pathname)) {
+        return -4;
+      } else {
+        return -999;
+      }
+    }
+
+  };
+
+
+  renderGroupList() {
+    let {groups} = this.props.data;
+    if (groups) {
       return groups.map(group => (
         <ListItem
           key={group.groupId}
@@ -83,6 +107,8 @@ class NavigationBar extends React.Component {
           {group.name}
         </ListItem>
       ));
+    } else {
+      return null;
     }
     // {/*onClick={this._goToGroupPage(group.id)}*/}
   }
@@ -98,8 +124,8 @@ class NavigationBar extends React.Component {
     this.props.router.replace(`/group/${groupId}`);
   };
 
-  _showAddNewGroupPopUp = () => {
-
+  _addNewGroup = () => {
+    this.props.router.replace("/group/create");
   };
 
   _signOut = () => {

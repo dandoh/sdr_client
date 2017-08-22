@@ -13,27 +13,33 @@ const styles = {
     margin: 0
   },
 };
-export default function TodoItem({todo, editable, onTick, onDelete}) {
+export default function TodoItem({todo, editable, onTick, onDelete, onEstimateTimeChange, onSpentTimeChange}) {
   return (
     <Paper style={{padding: '0.8vh', display: 'flex'}}>
-      <div style={{marginTop: '1.7vh'}}>
+      <div style={{marginTop: '2.4vh'}}>
         <Checkbox
           disabled={!editable}
           onCheck={() => onTick(todo.todoId)}
           checked={todo.state == 1}
         />
       </div>
-      <div style={{flex: 5, marginTop: '2vh'}}>
+      <div style={{flex: 5, marginTop: '3vh'}}>
         {todo.content}
       </div>
       <TextField
-        style={{flex: 2, marginRight: '1vh'}}
-        hintText="Estimated Time"
+        style={{flex: 1, marginRight: '1vh'}}
+        hintText="In minutes"
+        value={todo.estimateTime}
+        onChange={(_, val) => {onEstimateTimeChange(todo.todoId, val)}}
+        disabled={!editable}
       />
       <TextField
-        style={{flex: 2, marginRight: '1vh', marginBottom: '1vh'}}
-        hintText="Spent Time"
+        style={{flex: 1, marginRight: '1vh', marginBottom: '1vh'}}
+        hintText="In minutes"
         errorText=""
+        value={`${todo.spentTime}`}
+        disabled={!editable}
+        onChange={(_, val) => {onSpentTimeChange(todo.todoId, val)}}
         errorStyle={styles.errorStyle}
       />
       {editable &&

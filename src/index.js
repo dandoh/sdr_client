@@ -1,21 +1,19 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Router, Route, IndexRoute, browserHistory} from 'react-router'
-import ApolloClient, {createNetworkInterface} from 'apollo-client'
-import {ApolloProvider} from 'react-apollo'
-
-import './index.css'
-import App from './App'
-import GroupPage from './containers/GroupPage'
-import CreateReportPage from './containers/CreateReportPage'
-import UsersPage from './containers/UsersPage'
-import SignInPage from './containers/SignInPage'
-import SignUpPage from './containers/SignUpPage'
-import ReportDetailPage from './containers/ReportDetailPage'
-import NewsFeedPage from './containers/NewsFeedPage'
-import UserReportPage from './containers/UserReportPage'
-import UserArchivePage from './containers/UserArchivePage'
-
+import React from "react";
+import ReactDOM from "react-dom";
+import {Router, Route, IndexRoute, browserHistory} from "react-router";
+import ApolloClient, {createNetworkInterface} from "apollo-client";
+import {ApolloProvider} from "react-apollo";
+import "./index.css";
+import App from "./App";
+import GroupPage from "./containers/GroupPage";
+import SignInPage from "./containers/SignInPage";
+import SignUpPage from "./containers/SignUpPage";
+import ReportDetailPage from "./containers/ReportDetailPage";
+import NewsFeedPage from "./containers/NewsFeedPage";
+import UserPage from "./containers/UserPage";
+import UserArchivePage from "./containers/UserArchivePage";
+import CreateGroupPage from "./containers/CreateGroupPage";
+import EditGroupPage from "./containers/EditGroupPage";
 
 
 const logErrors = {
@@ -76,12 +74,14 @@ ReactDOM.render((
           <Route onEnter={ensureSignedIn} components={App}>
             <IndexRoute component={NewsFeedPage}/>
             <Route path="group">
+              <Route path="create" component={CreateGroupPage}/>
               <Route path=":groupId" component={GroupPage}/>
+              <Route path=":groupId/edit" component={EditGroupPage}/>
             </Route>
 
             <Route path="user">
               <Route path=":userId">
-                <Route path="report" component={UserReportPage}>
+                <Route path="report" component={UserPage}>
                   <Route path="archives" component={UserArchivePage}/>
                   <Route path=":reportId" component={ReportDetailPage}/>
                 </Route>

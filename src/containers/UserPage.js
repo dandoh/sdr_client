@@ -6,7 +6,6 @@ import {withRouter} from "react-router";
 import {graphql, compose} from "react-apollo";
 import gql from "graphql-tag";
 
-import ReportIcon from 'material-ui/svg-icons/av/playlist-add-check'
 import RaisedButton from 'material-ui/RaisedButton'
 import Paper from 'material-ui/Paper'
 import muiTheme from '../mui/muiTheme'
@@ -14,12 +13,15 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
+import MyReportButton from '../components/MyReportButton'
+import ArchiveIcon from 'material-ui/svg-icons/content/archive';
+import Avatar from 'material-ui/Avatar';
+import ReportIcon from 'material-ui/svg-icons/av/playlist-add-check'
 import Error from '../components/Error'
 import Loading from '../components/Loading'
-const nearbyIcon = <IconLocationOn />;
-const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
-const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
+
+const archiveIcon = <ArchiveIcon />;
+const todayReportIcon = <ReportIcon />;
 
 const styles = {
   wrapper: {
@@ -33,12 +35,12 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
   },
-  userName: {
+  groupName: {
     fontSize: 20,
     color: '#000000'
   },
 
-  date: {
+  subtitle: {
     fontSize: 12,
     color: '#969696'
   },
@@ -71,8 +73,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    overflowY: 'scroll',
-    overflowX: 'scroll',
+    overflowY: 'auto'
   },
 
   divider: {
@@ -92,65 +93,67 @@ const styles = {
 const ARCHIVES = 1;
 const REPORT = 0;
 
-class UserReportPage extends React.Component {
+class UserPage extends React.Component {
   state = {
-    pageState: 1,
+    pageState: 0,
+    subtitle: "",
   };
 
   render() {
-    const {children} = this.props;
+    console.log(this.props);
     let {loading, error, user} = this.props.data;
     if (error) {
       return (<Error/>)
     } else if (loading) {
       return (<Loading/>)
     } else {
+      const childrenWithProps = React.cloneElement(this.props.children, {
+        user,
+        changeSubtitle: this._changeSubtitle,
+      });
       return (
         <div style={styles.wrapper}>
           <Paper style={styles.bar}>
+            <div>
+              <Avatar
+                src={user.avatar}
+                size={50}
+                style={{marginLeft: '1vh'}}
+              />
+            </div>
             <div style={styles.userInfoBox}>
-              <div style={styles.userName}>{user.name}</div>
-              <div style={styles.date}>{this.state.pageState == ARCHIVES ? "Archives" : "17/2/4"}</div>
+              <div style={styles.groupName}>{user.name}</div>
+              <div style={styles.subtitle}>{this.state.subtitle}</div>
             </div>
             <div style={styles.space}>
             </div>
             <div style={styles.reportButtonWrapper}>
-              <RaisedButton
-                style={styles.reportButton}
-                label="Daily Report"
-                labelPosition="before"
-                primary={true}
-                icon={<ReportIcon />}
-              />
+              <MyReportButton/>
             </div>
           </Paper>
-          {/*<div style={styles.subMenu}>*/}
-          {/*<div style={{display: 'flex', flex: 1}}>*/}
-          {/*</div>*/}
-          {/*<div style={{display: 'flex', alignItems: 'flex-end'}}>*/}
-          {/*</div>*/}
-          {/*</div>*/}
-          <div style={styles.body}>
-            {children}
-          </div>
-          <Paper zDepth={1}>
+          <Paper zDepth={1} style={{}}>
             <BottomNavigation selectedIndex={this.state.pageState}>
               <BottomNavigationItem
                 label="Today Report"
                 onClick={() => this._setPageState(0)}
-                icon={recentsIcon}
+                icon={todayReportIcon}
               />
               <BottomNavigationItem
                 label="Archives"
                 onClick={() => this._setPageState(1)}
-                icon={nearbyIcon}
+                icon={archiveIcon}
               />
             </BottomNavigation>
           </Paper>
+          <div style={styles.body}>
+            {childrenWithProps}
+          </div>
         </div>
       )
     }
   }
+
+
   _setPageState = (pageState) => {
     this.setState({pageState});
 
@@ -159,28 +162,42 @@ class UserReportPage extends React.Component {
       const {userId} = this.props.params;
       this.props.router.replace(`/user/${userId}/report/archives`)
     } else if (pageState == REPORT) {
-      const {userId} = this.props.params;
-      this.props.router.replace(`/user/${userId}/report/1`)
+      const {user} = this.props.data;
+      const userId = user.userId;
+      const reportId = user.todayReport.reportId;
+      this.props.router.replace(`/user/${userId}/report/${reportId}`);
     }
   };
 
+
+  _changeSubtitle = (subtitle) => {
+    this.setState({subtitle})
+  }
+
 }
+
 
 const getUserInfoQuery = gql`query GetUserQuery($userId: Int) {
   user(userId: $userId) {
     userId
+    avatar
     name
+    todayReport {
+      reportId
+    }
   }
 }`;
 
-const withData = graphql(getUserInfoQuery, {
-  options: (ownProps) => {
-    return {
-      variables: {
-        userId: parseInt(ownProps.params.userId)
-      },
-      forceFetch: true,
+const withData = compose(
+  graphql(getUserInfoQuery, {
+    options: (ownProps) => {
+      return {
+        variables: {
+          userId: parseInt(ownProps.params.userId)
+        },
+        forceFetch: true,
+      }
     }
-  }
-});
-export default withData(withRouter(UserReportPage));
+  }),
+);
+export default withData(withRouter(UserPage));

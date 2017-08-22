@@ -3,7 +3,8 @@ import {withRouter} from "react-router";
 import Paper from 'material-ui/Paper'
 import muiThemeable from "material-ui/styles/muiThemeable";
 import Divider from "material-ui/Divider";
-import ReportIcon from 'material-ui/svg-icons/av/playlist-add-check'
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+import MyReportButton from '../components/MyReportButton'
 import muiTheme from '../mui/muiTheme'
 import {List, ListItem} from "material-ui/List";
 import {graphql, compose} from "react-apollo";
@@ -30,12 +31,12 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
   },
-  userName: {
+  groupName: {
     fontSize: 20,
     color: '#000000'
   },
 
-  date: {
+  subtitle: {
     fontSize: 12,
     color: '#969696'
   },
@@ -87,7 +88,6 @@ class GroupPage extends React.Component {
     } else if (loading) {
       return (<Loading/>)
     } else {
-      console.log(group);
       return this.renderGroupPage(group);
     }
   }
@@ -97,21 +97,23 @@ class GroupPage extends React.Component {
       <div style={styles.wrapper}>
         <Paper style={styles.bar}>
           <div style={styles.userInfoBox}>
-            <div style={styles.userName}>{group.name}</div>
-            <div style={styles.date}>{group.purpose}</div>
+            <div style={styles.groupName}>{group.name}</div>
+            <div style={styles.subtitle}>{group.subtitle}</div>
           </div>
           <div style={styles.space}></div>
           <div style={styles.reportButtonWrapper}>
-            <RaisedButton
-              style={styles.reportButton}
-              label="Daily Report"
-              labelPosition="before"
-              primary={true}
-              icon={<ReportIcon />}
-            />
+            <MyReportButton/>
           </div>
         </Paper>
         <div style={styles.body}>
+          <div style={{display: 'flex', alignItems: 'flex-end'}}>
+            <RaisedButton label="Edit Group" secondary={true}
+                          labelPosition="before"
+                          onClick={this._goToEditGroup}
+                          icon={<EditIcon />}
+                          style={{marginBottom: '1vh'}}/>
+            <div style={{flex: 1}}></div>
+          </div>
           <UserList users={group.users} onUserClick={this._handleUserClick}/>
         </div>
       </div>
@@ -119,9 +121,12 @@ class GroupPage extends React.Component {
   }
 
   _handleUserClick = (user) => {
-    console.log(user);
     this.props.router.replace(`/user/${user.userId}/report/${user.todayReport.reportId}`);
   };
+
+  _goToEditGroup = () => {
+    this.props.router.replace(`/group/${this.props.params.groupId}/edit`);
+  }
 
 }
 

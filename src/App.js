@@ -13,18 +13,17 @@ const styles = {
   main: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
   },
   body: {
     backgroundColor: '#edecec',
     display: 'flex',
     flex: 1,
-    overflowY: 'hidden',
-    overflowX: 'scroll',
   },
   content: {
     padding: '1vh',
     flex: 3,
+    height: '100vh',
+    overflowY:'auto',
   },
 };
 
@@ -37,7 +36,6 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(muiTheme);
     if (!prefixedStyles.main) {
       // do this once because user agent never changes
       const prefix = autoprefixer(muiTheme);
@@ -46,15 +44,17 @@ class App extends React.Component {
       prefixedStyles.body = prefix(styles.body);
       prefixedStyles.content = prefix(styles.content);
     }
-    const {children} = this.props;
+    const childrenWithProps = React.cloneElement(this.props.children, {
+      reload: () => {this.forceUpdate()}
+    });
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={prefixedStyles.wrapper}>
           <div style={prefixedStyles.main}>
             <div style={prefixedStyles.body}>
-              <NavigationBar/>
+              <NavigationBar location={this.props.location}/>
               <div style={prefixedStyles.content}>
-                {children}
+                {childrenWithProps}
               </div>
             </div>
           </div>

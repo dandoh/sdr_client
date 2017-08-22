@@ -8,22 +8,28 @@ import {ListItem} from 'material-ui/List'
 import Paper from 'material-ui/Paper'
 import {GridList, GridTile} from 'material-ui/GridList';
 
-const style = {
-  padding: 0,
+const styles = {
+  style: {
+    padding: 0,
+    position: 'relative'
+  },
+  nameBoxStyle: {}
 };
 
-const rippleStyle = {
-  width: "100%",
-  height: "100%"
-};
+const rippleStyle = {};
 export default function UserItem({user, onClick}) {
   return (
     <Paper>
-      <ListItem onClick={() => {onClick(user)}} style={rippleStyle} innerDivStyle={style}>
-        <GridTile
-          key={user.userId}
-          title={user.name}>
-          <img src={user.avatar} maxLength="100%"/>
+      <ListItem onClick={() => {
+        onClick(user)
+      }} style={rippleStyle} innerDivStyle={styles.style}>
+        <GridTile title={user.name}>
+          <div style={{backgroundImage: `url(${user.avatar})`,
+            width: '30vh', height: '30vh',
+            backgroundSize: 'cover'
+          }}>
+
+          </div>
         </GridTile>
       </ListItem>
     </Paper>

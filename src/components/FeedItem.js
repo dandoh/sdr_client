@@ -6,6 +6,7 @@
  */
 
 import React from "react";
+import moment from 'moment';
 import {Card, CardHeader, CardTitle, CardText} from 'material-ui/Card'
 import Paper from 'material-ui/Paper'
 import TouchRipple from 'material-ui/internal/TouchRipple'
@@ -15,32 +16,34 @@ import {List, ListItem} from "material-ui/List";
 const style = {
   marginTop: '0.5vh',
 };
-export default function FeedItem(feed) {
+export default function FeedItem({feed, myUserId, onFeedClick}) {
+  console.log(feed);
 
   const getTitle = () => {
-    return (
-      <div><span>Shiki</span> commented on your report</div>
-    )
+    if (feed.report.user.userId == myUserId) {
+      return `${feed.lastComment.user.name} commented on your report (${feed.numberCommentsNotSeen})`
+    } else {
+      return `${feed.lastComment.user.name} commented on a report of ${feed.report.user.name} that you're following
+ (${feed.numberCommentsNotSeen})`
+    }
   };
 
   const getSubtitle = () => {
-    return '5 minutes ago'
+    const timeAgo = moment(feed.lastComment.createdAt.substring(0, 19)).fromNow();
+    return timeAgo
   };
 
   const getAvatar = () => {
-    return 'https://robohash.org/9i3KyRqXoWg4U2Ce.png?size=300x300';
+    return feed.lastComment.user.avatar;
   };
 
   const getText = () => {
-    return `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio`
+    return feed.lastComment.content;
   };
 
   return (
     <Card style={style}>
-      <ListItem innerDivStyle={{padding: 0}}>
+      <ListItem innerDivStyle={{padding: 0}} onClick={() => onFeedClick(feed.report)}>
         <CardHeader
           title={getTitle()}
           subtitle={getSubtitle()}

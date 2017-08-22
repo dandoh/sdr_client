@@ -13,7 +13,8 @@ export default function UserList({users, onUserClick}) {
     <div>
       <GridList
         style={style}
-        cols={3}>
+        cellHeight={100}
+        cols={5}>
         {users.map((user) => (
           <UserItem key={user.userId} user={user} onClick={onUserClick}/>
         ))}

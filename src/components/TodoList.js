@@ -6,12 +6,15 @@ import TodoItem from './TodoItem';
 
 export default function TodoList({
   todoes, editable,
-  onTick, onDelete
+  onTick, onDelete,
+  onEstimateTimeChange, onSpentTimeChange
 }) {
   return (
     <div>
       {todoes.map((todo) => (<TodoItem
         key={todo.todoId}
+        onEstimateTimeChange={onEstimateTimeChange}
+        onSpentTimeChange={onSpentTimeChange}
         todo={todo}
         editable={editable}
         onTick={onTick}
