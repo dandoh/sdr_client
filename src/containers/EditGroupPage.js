@@ -14,7 +14,8 @@ import muiTheme from '../mui/muiTheme'
 import {List, ListItem} from "material-ui/List";
 import TextField from 'material-ui/TextField';
 import ChipInput from 'material-ui-chip-input'
-import RaisedButton from 'material-ui/RaisedButton'
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Subheader from 'material-ui/Subheader';
@@ -95,7 +96,7 @@ class EditGroupPage extends React.Component {
       const {group} = newProps.groupInfoQuery;
       this.setState({
         name: group.name,
-        purpose: group.subtitle,
+        purpose: group.purpose,
         emails: group.users.map(_ => _.email)
       })
     }
@@ -141,7 +142,7 @@ class EditGroupPage extends React.Component {
             <TextField
               hintText="E.g Learn programming and make useful product"
               fullWidth={true}
-              value={this.state.subtitle}
+              value={this.state.purpose}
               errorText={this.state.purposeError}
               onChange={(_, val) => {
                 if (val != "") this.setState({purposeError: ""});
@@ -165,6 +166,10 @@ class EditGroupPage extends React.Component {
                 <CircularProgress />
               </div>
               }
+              <FlatButton label="Cancel" secondary={true}
+                            onClick={this._cancel}
+                            disabled={this.state.loading}
+                            style={{marginBottom: '1vh'}}/>
               <RaisedButton label="Save" secondary={true}
                             onClick={this._saveInfoGroup}
                             disabled={this.state.loading}
@@ -175,7 +180,9 @@ class EditGroupPage extends React.Component {
       </div>
     )
   }
-
+  _cancel = () =>{
+     this.props.router.replace(`/group/${this.props.params.groupId}`);
+  }
   _saveInfoGroup = () => {
     const {name, purpose, emails} = this.state;
     if (name == "") {
@@ -192,7 +199,7 @@ class EditGroupPage extends React.Component {
       variables: {
         groupId: this.props.params.groupId,
         groupName: name,
-        subtitle: purpose,
+        purpose: purpose,
         emails: emails
       }
     }).then(res => {

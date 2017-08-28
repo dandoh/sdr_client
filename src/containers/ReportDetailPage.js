@@ -92,7 +92,7 @@ class ReportDetailPage extends React.Component {
         <div style={styles.wrapper}>
           <div style={{display: 'flex'}}>
             <Subheader style={{flex: 8}}>Task</Subheader>
-            <Subheader style={isMine ? {flex: 1.5} : {flex: 1.5}}>Estimated Time</Subheader>
+            <Subheader style={isMine ? {flex: 2.0} : {flex: 1.5}}>Estimated Time</Subheader>
             <Subheader style={isMine ? {flex: 2.5} : {flex: 1.5}}>Spent Time</Subheader>
           </div>
           <TodoList todoes={report.todoes}

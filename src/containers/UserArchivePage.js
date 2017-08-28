@@ -47,7 +47,7 @@ class UserArchivePage extends React.Component {
             ))}
           </SelectField>
           <SelectField
-            style={{width: '15vh', marginLeft: '2vh'}}
+            style={{width: '19vh', marginLeft: '2vh'}}
             floatingLabelText="Year"
             value={this.state.year}
             onChange={this._handleChangeYear}

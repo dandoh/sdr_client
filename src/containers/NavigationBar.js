@@ -9,6 +9,8 @@ import NewsFeedIcon from "material-ui/svg-icons/social/notifications";
 import GroupIcon from "material-ui/svg-icons/social/group";
 import SignOutIcon from "material-ui/svg-icons/action/exit-to-app";
 import {List, ListItem, makeSelectable} from "material-ui/List";
+import {GridList, GridTile} from 'material-ui/GridList';
+import { Link } from 'react-router'
 
 // STYLE - UI RELATED
 const styleFromMuiTheme = (muiTheme) => {
@@ -22,7 +24,15 @@ const styleFromMuiTheme = (muiTheme) => {
   }
 };
 const SelectableList = makeSelectable(List);
-
+const styles = {
+  logo: {
+    maxWidth: "100%",
+    height: "auto",
+  },
+  logoPanel: {
+ 
+  }
+};
 class NavigationBar extends React.Component {
 
   state = {
@@ -36,7 +46,6 @@ class NavigationBar extends React.Component {
     }
   }
 
-
   render() {
     const {muiTheme} = this.props;
     const navigationStyle = styleFromMuiTheme(muiTheme);
@@ -44,7 +53,9 @@ class NavigationBar extends React.Component {
     console.log(this.props.data);
     return (
       <Paper style={navigationStyle}>
-        <h1>Scoville</h1>
+      <div style={styles.logoPanel}>
+        <Link to="/"><img src="./logo.png" style={styles.logo}/></Link>
+      </div>
         <Divider />
         <SelectableList
           value={pageValue}>
