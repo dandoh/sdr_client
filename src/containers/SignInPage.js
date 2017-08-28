@@ -1,6 +1,10 @@
 import React from 'react';
 import {withRouter} from "react-router";
-import {LinkContainer} from 'react-router-bootstrap'
+import Paper from 'material-ui/Paper'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import Divider from 'material-ui/Divider'
 
 
 class SignInPage extends React.Component {
@@ -10,63 +14,102 @@ class SignInPage extends React.Component {
       email: "",
       password: "",
     };
-    this.handleChangeEmail = this.handleChangeEmail.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit} className="form-horizontal">
-          <fieldset>
-            <legend>Sign-in</legend>
-            <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="email">Email</label>
-              <div className="col-md-4">
-                <input id="email" name="email" type="text" placeholder="e.g dandoh"
-                       className="form-control input-md" value={this.state.email}
-                       onChange={this.handleChangeEmail}/>
+      <div style={{
+        backgroundImage: "url(./background_blur.jpg)",
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
+      }}>
+        <div style={{width: '80vh', display: 'flex', flexDirection: 'row'}}>
+          <Paper style={{flex: 3, height: '75vh', display: 'flex', flexDirection: 'column', radius: '10px'}}>
+            <div style={{
+              backgroundImage: "url(./background.jpg)",
+              backgroundSize: '100% 100%',
+              flex: 2,
+              display: 'flex'
+            }}>
+              <div style={{
+                backgroundColor: 'rgba(96, 95, 95, 0.6)',
+                backgroundSize: '100% 100%',
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '5vh'
+              }}>
+                <div style={{
+                  font: 'roboto',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontSize: '10vh'
+                }}>SDR</div>
+                <div style={{
+                  font: 'roboto',
+                  color: 'rgba(255, 255, 255, 0.6)',
+                  fontSize: '4vh'
+                }}>Scoville Daily Reporting System</div>
+
               </div>
             </div>
-
-            <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="password">Password</label>
-              <div className="col-md-4">
-                <input id="password" name="password" type="password" placeholder="password"
-                       className="form-control input-md" value={this.state.password}
-                       onChange={this.handleChangePassword}/>
-
+            <Divider/>
+            <div style={{
+              flex: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              paddingLeft: '5vh',
+              paddingRight: '5vh'
+            }}>
+              <TextField
+                style={{marginTop: '2vh'}}
+                value={this.state.email}
+                name="email"
+                onChange={(_, val) => this.setState({email: val})}
+                floatingLabelText="Email"
+                autoComplete="off"
+                fullWidth={true}
+              />
+              <TextField
+                floatingLabelText="Password"
+                type="password"
+                name="password"
+                autoComplete="new-password"
+                value={this.state.password}
+                onChange={(_, val) => this.setState({password: val})}
+                fullWidth={true}
+                style={{marginBottom: '5vh'}}
+              />
+              <RaisedButton label="Sign In" primary={true}
+                            fullWidth={true}
+                            onClick={this.handleSubmit}
+                            style={{marginBottom: '2vh'}}/>
+              <div style={{
+                justifyContent: 'center',
+                display: 'flex',
+                color: '#969696',
+                alignItems: 'center'
+              }}>
+                <div>
+                  Not registered? <a href="/sign-up">Create an account</a>
+                </div>
               </div>
             </div>
-
-            <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="sign-in"/>
-              <div className="col-md-8">
-                <button id="sign-in" name="sign-in" className="btn btn-primary">Sign in</button>
-                <LinkContainer to={`/sign-up`}>
-                  <button id="sign-up" name="sign-up" className="btn btn-default">Sign up</button>
-                </LinkContainer>
-              </div>
-            </div>
-
-          </fieldset>
-        </form>
+          </Paper>
+        </div>
 
       </div>
     )
   }
 
-  handleChangeEmail(event) {
-    this.setState({email: event.target.value});
-  }
 
-  handleChangePassword(event) {
-    this.setState({password: event.target.value});
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit() {
     fetch("http://localhost:8080/signin", {
       headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -80,7 +123,7 @@ class SignInPage extends React.Component {
       } else {
         res.json().then(
           json => {
-            console.log(json)
+            console.log(json);
             localStorage.setItem('token', json.token);
             localStorage.setItem('userId', json.userId);
             this.props.router.replace("/");
@@ -90,17 +133,6 @@ class SignInPage extends React.Component {
     })
   }
 
-  responseFacebook(response) {
-    console.log(response);
-    fetch("http://localhost:8080/fblogin", {
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      method: "POST",
-      body: JSON.stringify({accessToken: response.accessToken})
-    })
-  }
 }
 
 export default withRouter(SignInPage)

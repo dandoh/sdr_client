@@ -74,8 +74,8 @@ class ReportDetailPage extends React.Component {
   }
 
   componentWillUnmount() {
-    this._syncToServer();
-    this._updateNote();
+    this.state.report && this._syncToServer();
+    this.state.report && this._updateNote();
   }
 
 

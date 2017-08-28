@@ -5,6 +5,10 @@ import ApolloClient, {createNetworkInterface} from "apollo-client";
 import {ApolloProvider} from "react-apollo";
 import "./index.css";
 import App from "./App";
+import {MuiThemeProvider} from "material-ui/styles";
+import autoprefixer from "material-ui/utils/autoprefixer";
+import NavigationBar from "./containers/NavigationBar";
+import muiTheme from "./mui/muiTheme"
 import GroupPage from "./containers/GroupPage";
 import SignInPage from "./containers/SignInPage";
 import SignUpPage from "./containers/SignUpPage";
@@ -68,35 +72,37 @@ function ensureSignedOut(nextState, replace) {
 }
 
 ReactDOM.render((
-    <ApolloProvider client={client}>
-      <Router history={browserHistory}>
-        <Route path="/">
-          <Route onEnter={ensureSignedIn} components={App}>
-            <IndexRoute component={NewsFeedPage}/>
-            <Route path="group">
-              <Route path="create" component={CreateGroupPage}/>
-              <Route path=":groupId" component={GroupPage}/>
-              <Route path=":groupId/edit" component={EditGroupPage}/>
-            </Route>
-
-            <Route path="user">
-              <Route path=":userId">
-                <Route path="report" component={UserPage}>
-                  <Route path="archives" component={UserArchivePage}/>
-                  <Route path=":reportId" component={ReportDetailPage}/>
-                </Route>
+    <MuiThemeProvider muiTheme={muiTheme}>
+      <ApolloProvider client={client}>
+        <Router history={browserHistory}>
+          <Route path="/">
+            <Route onEnter={ensureSignedIn} components={App}>
+              <IndexRoute component={NewsFeedPage}/>
+              <Route path="group">
+                <Route path="create" component={CreateGroupPage}/>
+                <Route path=":groupId" component={GroupPage}/>
+                <Route path=":groupId/edit" component={EditGroupPage}/>
               </Route>
 
+              <Route path="user">
+                <Route path=":userId">
+                  <Route path="report" component={UserPage}>
+                    <Route path="archives" component={UserArchivePage}/>
+                    <Route path=":reportId" component={ReportDetailPage}/>
+                  </Route>
+                </Route>
+
+              </Route>
+            </Route>
+            <Route onEnter={ensureSignedOut}>
+              <Route path="sign-in" component={SignInPage}/>
+              <Route path="sign-up" component={SignUpPage}/>
             </Route>
           </Route>
-          <Route onEnter={ensureSignedOut}>
-            <Route path="sign-in" component={SignInPage}/>
-            <Route path="sign-up" component={SignUpPage}/>
-          </Route>
-        </Route>
 
-      </Router>
-    </ApolloProvider>
+        </Router>
+      </ApolloProvider>
+    </MuiThemeProvider>
   ),
   document.getElementById('root')
 );
