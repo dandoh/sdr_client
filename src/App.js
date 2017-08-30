@@ -23,7 +23,7 @@ const styles = {
     padding: '1vh',
     flex: 3,
     height: '100vh',
-    overflowY:'auto',
+    overflowY: 'auto',
   },
 };
 
@@ -45,21 +45,21 @@ class App extends React.Component {
       prefixedStyles.content = prefix(styles.content);
     }
     const childrenWithProps = React.cloneElement(this.props.children, {
-      reload: () => {this.forceUpdate()}
+      reload: () => {
+        this.forceUpdate()
+      }
     });
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={prefixedStyles.wrapper}>
-          <div style={prefixedStyles.main}>
-            <div style={prefixedStyles.body}>
-              <NavigationBar location={this.props.location}/>
-              <div style={prefixedStyles.content}>
-                {childrenWithProps}
-              </div>
+      <div style={prefixedStyles.wrapper}>
+        <div style={prefixedStyles.main}>
+          <div style={prefixedStyles.body}>
+            <NavigationBar location={this.props.location}/>
+            <div style={prefixedStyles.content}>
+              {childrenWithProps}
             </div>
           </div>
         </div>
-      </MuiThemeProvider>
+      </div>
     )
   }
 }

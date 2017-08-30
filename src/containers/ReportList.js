@@ -54,6 +54,7 @@ class ReportList extends React.Component {
 
 
   _getDay = (dateString) => {
+
     function ordinal_suffix_of(i) {
       const j = i % 10,
         k = i % 100;
@@ -70,8 +71,8 @@ class ReportList extends React.Component {
     }
 
     const date = new Date(dateString);
-    const day = date.getDay();
-    return day + ordinal_suffix_of(day);
+    const day = date.getDate();
+    return ordinal_suffix_of(day);
   }
 }
 

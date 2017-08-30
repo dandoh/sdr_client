@@ -1,6 +1,10 @@
 import React from 'react';
 import {withRouter} from "react-router";
-import {LinkContainer} from 'react-router-bootstrap'
+import Paper from 'material-ui/Paper'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import Divider from 'material-ui/Divider'
 
 class SignUpPage extends React.Component {
 
@@ -12,80 +16,110 @@ class SignUpPage extends React.Component {
       password: "",
     };
 
-    this.handleChangeUsername = this.handleChangeUsername.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
     return (
-      <form className="form-horizontal" onSubmit={this.handleSubmit}>
-        <fieldset>
-          <legend>Sign-up</legend>
+      <div style={{
+        backgroundImage: "url(./background_blur.jpg)",
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
+      }}>
+        <div style={{width: '80vh', display: 'flex', flexDirection: 'row'}}>
+          <Paper style={{flex: 3, height: '90vh', display: 'flex', flexDirection: 'column', radius: '10px'}}>
+            <div style={{
+              backgroundImage: "url(./background.jpg)",
+              backgroundSize: '100% 100%',
+              flex: 2,
+              display: 'flex'
+            }}>
+              <div style={{
+                backgroundColor: 'rgba(96, 95, 95, 0.6)',
+                backgroundSize: '100% 100%',
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '5vh'
+              }}>
+                <div style={{
+                  font: 'roboto',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontSize: '10vh'
+                }}>SDR</div>
+                <div style={{
+                  font: 'roboto',
+                  color: 'rgba(255, 255, 255, 0.6)',
+                  fontSize: '4vh'
+                }}>Scoville Daily Reporting System</div>
 
-          <div className="form-group">
-            <label className="col-md-4 control-label" htmlFor="email">Email</label>
-            <div className="col-md-4">
-              <input id="email" name="email" type="email" placeholder="e.g dandoh@gmail.com"
-                     className="form-control input-md" value={this.state.email}
-                     onChange={this.handleChangeEmail}
+              </div>
+            </div>
+            <Divider/>
+            <div style={{
+              flex: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              paddingLeft: '5vh',
+              paddingRight: '5vh'
+            }}>
+              <TextField
+                style={{marginTop: '2vh'}}
+                value={this.state.email}
+                name="email"
+                onChange={(_, val) => this.setState({email: val})}
+                floatingLabelText="Email"
+                autoComplete="off"
+                fullWidth={true}
               />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="col-md-4 control-label" htmlFor="username">Username</label>
-            <div className="col-md-4">
-              <input id="username" name="username" type="text" placeholder="e.g dandoh"
-                     className="form-control input-md" value={this.state.username}
-                     onChange={this.handleChangeUsername}
+              <TextField
+                value={this.state.username}
+                name="username"
+                onChange={(_, val) => this.setState({username: val})}
+                floatingLabelText="Name"
+                autoComplete="off"
+                fullWidth={true}
               />
+              <TextField
+                floatingLabelText="Password"
+                type="password"
+                name="password"
+                autoComplete="new-password"
+                value={this.state.password}
+                onChange={(_, val) => this.setState({password: val})}
+                fullWidth={true}
+                style={{marginBottom: '5vh'}}
+              />
+              <RaisedButton label="Sign Up" primary={true}
+                            fullWidth={true}
+                            onClick={this.handleSubmit}
+                            style={{marginBottom: '2vh'}}/>
+              <div style={{
+                justifyContent: 'center',
+                display: 'flex',
+                color: '#969696',
+                alignItems: 'center'
+              }}>
+                <div>
+                  Already have an account? <a href="/sign-in">Sign in</a>
+                </div>
+              </div>
             </div>
-          </div>
+          </Paper>
+        </div>
 
-          <div className="form-group">
-            <label className="col-md-4 control-label" htmlFor="password">Password</label>
-            <div className="col-md-4">
-              <input id="password" name="password" type="password" placeholder="password"
-                     value={this.state.password} onChange={this.handleChangePassword}
-                     className="form-control input-md"/>
-
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="col-md-4 control-label" htmlFor="sign-in"/>
-            <div className="col-md-8">
-              <button id="sign-up" name="sign-up" className="btn btn-primary">Sign up</button>
-              <LinkContainer to={`/sign-in`}>
-                <button id="sign-in" name="sign-in" className="btn btn-default">Sign in</button>
-              </LinkContainer>
-            </div>
-          </div>
-
-        </fieldset>
-      </form>
+      </div>
     )
   }
 
-  handleChangeUsername(e) {
-    e.preventDefault();
-    this.setState({username: e.target.value})
-  }
-
-  handleChangePassword(e) {
-    e.preventDefault();
-    this.setState({password: e.target.value})
-  }
-
-  handleChangeEmail(e) {
-    e.preventDefault();
-    this.setState({email: e.target.value})
-  }
 
   handleSubmit(e) {
-    e.preventDefault();
     fetch("http://localhost:8080/signup", {
       headers: {
         'Accept': 'application/json, text/plain, */*',

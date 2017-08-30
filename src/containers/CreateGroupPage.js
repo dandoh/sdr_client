@@ -14,7 +14,8 @@ import muiTheme from '../mui/muiTheme'
 import {List, ListItem} from "material-ui/List";
 import TextField from 'material-ui/TextField';
 import ChipInput from 'material-ui-chip-input'
-import RaisedButton from 'material-ui/RaisedButton'
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Subheader from 'material-ui/Subheader';
@@ -131,7 +132,7 @@ class CreateGroupPage extends React.Component {
             <TextField
               hintText="E.g Learn programming and make useful product"
               fullWidth={true}
-              value={this.state.subtitle}
+              value={this.state.purpose}
               errorText={this.state.purposeError}
               onChange={(_, val) => {
                 if (val != "") this.setState({purposeError: ""});
@@ -155,7 +156,11 @@ class CreateGroupPage extends React.Component {
                 <CircularProgress />
               </div>
               }
-              <RaisedButton label="Create new group" secondary={true}
+              <FlatButton label="Cancel" secondary={true}
+                            onClick={this._cancel}
+                            disabled={this.state.loading}
+                            style={{marginBottom: '1vh'}}/>
+              <RaisedButton label="Create group" secondary={true}
                             onClick={this._submitGroup}
                             disabled={this.state.loading}
                             style={{marginBottom: '1vh'}}/>
@@ -166,6 +171,9 @@ class CreateGroupPage extends React.Component {
     )
   }
 
+  _cancel = () =>{
+     this.props.router.push('/');
+  }
   _submitGroup = () => {
     const {name, purpose, emails} = this.state;
     if (name == "") {
@@ -181,7 +189,7 @@ class CreateGroupPage extends React.Component {
     this.props.addGroup({
       variables: {
         name: name,
-        subtitle: purpose
+        purpose: purpose
       }
     }).then(res => {
       const groupId = res.data.addGroup;

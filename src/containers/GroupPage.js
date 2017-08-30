@@ -11,11 +11,11 @@ import {graphql, compose} from "react-apollo";
 import gql from "graphql-tag";
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
-import RaisedButton from 'material-ui/RaisedButton'
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Error from '../components/Error'
 import Loading from '../components/Loading'
 import UserList from '../components/UserList'
-
 
 import FeedItem from '../components/FeedItem';
 
@@ -32,11 +32,11 @@ const styles = {
     alignItems: 'center',
   },
   groupName: {
-    fontSize: 20,
-    color: '#000000'
+    fontSize: 22,
+    color: muiTheme.palette.primary1Color,
   },
 
-  subtitle: {
+  purpose: {
     fontSize: 12,
     color: '#969696'
   },
@@ -98,7 +98,7 @@ class GroupPage extends React.Component {
         <Paper style={styles.bar}>
           <div style={styles.userInfoBox}>
             <div style={styles.groupName}>{group.name}</div>
-            <div style={styles.subtitle}>{group.subtitle}</div>
+            <div style={styles.purpose}>{group.purpose}</div>          
           </div>
           <div style={styles.space}></div>
           <div style={styles.reportButtonWrapper}>
@@ -107,7 +107,7 @@ class GroupPage extends React.Component {
         </Paper>
         <div style={styles.body}>
           <div style={{display: 'flex', alignItems: 'flex-end'}}>
-            <RaisedButton label="Edit Group" secondary={true}
+            <FlatButton label="Edit Group" secondary={true}
                           labelPosition="before"
                           onClick={this._goToEditGroup}
                           icon={<EditIcon />}
