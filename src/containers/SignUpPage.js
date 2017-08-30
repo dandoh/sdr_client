@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
+import Constants from '../constants';
 
 class SignUpPage extends React.Component {
 
@@ -120,7 +121,7 @@ class SignUpPage extends React.Component {
 
 
   handleSubmit(e) {
-    fetch("http://localhost:8080/signup", {
+    fetch(Constants.SIGNUP_ENDPOINT, {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',

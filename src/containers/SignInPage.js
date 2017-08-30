@@ -1,5 +1,6 @@
 import React from 'react';
 import {withRouter} from "react-router";
+import Constants from '../constants';
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -110,7 +111,7 @@ class SignInPage extends React.Component {
 
 
   handleSubmit() {
-    fetch("http://localhost:8080/signin", {
+    fetch(Constants.SIGNIN_ENDPONT, {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',

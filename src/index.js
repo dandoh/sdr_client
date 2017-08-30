@@ -10,6 +10,7 @@ import autoprefixer from "material-ui/utils/autoprefixer";
 import NavigationBar from "./containers/NavigationBar";
 import muiTheme from "./mui/muiTheme"
 import GroupPage from "./containers/GroupPage";
+import Constant from './constants';
 import SignInPage from "./containers/SignInPage";
 import SignUpPage from "./containers/SignUpPage";
 import ReportDetailPage from "./containers/ReportDetailPage";
@@ -37,7 +38,7 @@ const logErrors = {
     }
   },
 };
-let networkInterface = createNetworkInterface({uri: 'http://localhost:8080/graphql'});
+let networkInterface = createNetworkInterface({uri: Constant.GRAPHQL_ENDPONT});
 networkInterface.useAfter([logErrors]);
 networkInterface.use([{
   applyMiddleware(req, next) {
